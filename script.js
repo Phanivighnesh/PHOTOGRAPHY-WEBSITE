@@ -1,9 +1,12 @@
-window.onload = () => {
-    setTimeout(() => {
-        document.querySelector("body").classList.add("display");
-    }, 3000);   
-};
+// Animate Smooth Scroll
+$('#view-work').on('click', function() {
+  const images = $('#images').position().top;
 
-document.querySelector(".hamburger-menu").addEventListener("click", () => {
-    document.querySelector(".container").classList.toggle("change");
+  $('html, body').animate(
+    {
+      scrollTop: images
+    },
+    900
+  );
 });
+            
