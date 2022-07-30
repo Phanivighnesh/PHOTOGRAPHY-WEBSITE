@@ -1,26 +1,82 @@
-var slideIndex = 1;
-showSlides(slideIndex);
+// ------------------------------
+// HEADER SIZE EQUALS WINDOW SIZE
+// ------------------------------
+$(document).ready(function(){
+  $( window ).resize(function() {
+    $('#header').height($(window).height());
+  });
+});
+                  
+// -----------                  
+// MENU TOGGLE
+// -----------
+$(document).ready(function(){
+ $('#myNavbar .menuBtn').on('click', function(e){
+   e.preventDefault();
+   $('#myNavbar ul').toggleClass('menuToggle');
+  }); 
+  $('#myNavbar ul li a').on('click', function(e){
+   e.preventDefault();
+   $('#myNavbar ul').toggleClass('menuToggle');
+  });                  
+});
 
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
+// -------------
+// SMOOTH SCROLL 
+// -------------
+$(document).ready(function($){
+  var sections = [];
+  var id = false;
+  var $navbar = $('#myNavbar ul li a');
+  
+  $navbar.click(function(e){
+    e.preventDefault();
+    $('html, body').animate({
+      scrollTop: $($(this).attr('href')).offset().top},1000);
+    hash($(this).attr('href'));
+  });    
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
+// ----------
+// SCROLL SPY
+// ----------
+  $navbar.each(function(){
+    $('#myNavbar ul li:first-child a~hr').addClass('current');
+    sections.push($($(this).attr('href')));
+  });
+  $(window).scroll(function(e){
+    var scrollTop = $(this).scrollTop() + ($(window).height()/2);
+    for (var i in sections){
+      var section = sections[i];
+      if (scrollTop > section.offset().top){
+        var scrolled_id = section.attr('id');
+      }
+      
+    }
+    if (scrolled_id !== id) {
+      id = scrolled_id;
+      $('#myNavbar ul li a~hr').removeClass('current');
+      $('#myNavbar ul li a[href="#' + id + '"]~hr').addClass('current');
+    }
+  });
+});
 
-function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1} 
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none"; 
+hash = function(h){
+  if (history.pushState){
+    history.pushState(null, null, h);
+  }else{
+    location.hash = h;
   }
-  for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block"; 
-  dots[slideIndex-1].className += " active";
 }
+
+
+
+$(document).ready(function(){
+  $('a.gallery').featherlightGallery({
+    gallery: {
+        previous: '«',
+        next: '»',
+        fadeIn: 300
+    },
+    openSpeed: 300
+  });
+});
